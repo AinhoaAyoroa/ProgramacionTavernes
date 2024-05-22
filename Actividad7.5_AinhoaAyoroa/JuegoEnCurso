@@ -1,0 +1,160 @@
+class GameScreen extends StatefulWidget {
+  @override
+  _GameScreenState createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  bool _isGamePaused = false;
+  bool _isGameOver = false;
+  int _score = 0;
+  List<Offset> _snakePositions = [Offset(0, 0)];
+  Offset _foodPosition = Offset(5, 5);
+  String _direction = 'right';
+
+  @override
+  void initState() {
+    super.initState();
+    _startGame();
+  }
+
+  void _startGame() {
+    Timer.periodic(Duration(milliseconds: 300), (Timer timer) {
+      if (_isGameOver) {
+        timer.cancel();
+      } else if (!_isGamePaused) {
+        setState(() {
+          _moveSnake();
+          if (_snakePositions.first == _foodPosition) {
+            _eatFood();
+          } else if (_isCollision()) {
+            _gameOver();
+          }
+        });
+      }
+    });
+  }
+
+  void _moveSnake() {
+    Offset newPosition;
+    switch (_direction) {
+      case 'up':
+        newPosition = _snakePositions.first.translate(0, -1);
+        break;
+      case 'down':
+        newPosition = _snakePositions.first.translate(0, 1);
+        break;
+      case 'left':
+        newPosition = _snakePositions.first.translate(-1, 0);
+        break;
+      case 'right':
+        newPosition = _snakePositions.first.translate(1, 0);
+        break;
+      default:
+        newPosition = _snakePositions.first;
+    }
+    _snakePositions = [newPosition] + _snakePositions.take(_snakePositions.length - 1).toList();
+  }
+
+  void _eatFood() {
+    setState(() {
+      _score += 10;
+      _snakePositions.add(_snakePositions.last);
+      _foodPosition = Offset((Random().nextInt(10)).toDouble(), (Random().nextInt(10)).toDouble());
+    });
+  }
+
+  bool _isCollision() {
+    for (int i = 1; i < _snakePositions.length; i++) {
+      if (_snakePositions[i] == _snakePositions.first) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void _gameOver() {
+    setState(() {
+      _isGameOver = true;
+    });
+  }
+
+  void _pauseGame() {
+    setState(() {
+      _isGamePaused = true;
+    });
+  }
+
+  void _resumeGame() {
+    setState(() {
+      _isGamePaused = false;
+    });
+  }
+
+  void _restartGame() {
+    setState(() {
+      _isGameOver = false;
+      _isGamePaused = false;
+      _score = 0;
+      _snakePositions = [Offset(0, 0)];
+      _direction = 'right';
+      _startGame();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Score: $_score')),
+      body: GestureDetector(
+        onVerticalDragUpdate: (details) {
+          if (details.primaryDelta! < 0) {
+            _direction = 'up';
+          } else if (details.primaryDelta! > 0) {
+            _direction = 'down';
+          }
+        },
+        onHorizontalDragUpdate: (details) {
+          if (details.primaryDelta! < 0) {
+            _direction = 'left';
+          } else if (details.primaryDelta! > 0) {
+            _direction = 'right';
+          }
+        },
+        child: Stack(
+          children: [
+            // Snake
+            for (Offset position in _snakePositions)
+              Positioned(
+                top: position.dy * 10,
+                left: position.dx * 10,
+                child: Container(
+                  width: 10,
+                  height: 10,
+                  color: Colors.green,
+                ),
+              ),
+            // Food
+            Positioned(
+              top: _foodPosition.dy * 10,
+              left: _foodPosition.dx * 10,
+              child: Container(
+                width: 10,
+                height: 10,
+                color: Colors.red,
+              ),
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: _isGameOver
+          ? FloatingActionButton(
+              onPressed: _restartGame,
+              child: Icon(Icons.restart_alt),
+            )
+          : FloatingActionButton(
+              onPressed: _isGamePaused ? _resumeGame : _pauseGame,
+              child: Icon(_isGamePaused ? Icons.play_arrow : Icons.pause),
+            ),
+    );
+  }
+}

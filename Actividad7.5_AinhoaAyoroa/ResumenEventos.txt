@@ -1,0 +1,8 @@
+Evento	                Función	        Descripción
+onStartGamePressed()	Navigator.push	Inicia el juego y navega al estado de "Juego en Curso".
+onPausePressed()	    _pauseGame	    Pausa el juego.
+onResumePressed()	    _resumeGame	    Reanuda el juego.
+onGameOver()	        _gameOver	    Termina el juego cuando ocurre una colisión.
+onFoodEaten()	        _eatFood	    Incrementa la longitud de la serpiente y la puntuación.
+onRestartGamePressed()	_restartGame	Reinicia el juego.
+onGoToStartPressed()	Navigator.pop	Vuelve al estado de "Inicio".
