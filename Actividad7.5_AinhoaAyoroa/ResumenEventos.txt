@@ -1,8 +1,12 @@
-Evento	                Función	        Descripción
-onStartGamePressed()	Navigator.push	Inicia el juego y navega al estado de "Juego en Curso".
-onPausePressed()	    _pauseGame	    Pausa el juego.
-onResumePressed()	    _resumeGame	    Reanuda el juego.
-onGameOver()	        _gameOver	    Termina el juego cuando ocurre una colisión.
-onFoodEaten()	        _eatFood	    Incrementa la longitud de la serpiente y la puntuación.
-onRestartGamePressed()	_restartGame	Reinicia el juego.
-onGoToStartPressed()	Navigator.pop	Vuelve al estado de "Inicio".
+Evento                    Función                    Descripción
+onStartGamePressed()	    Navigator.push	           Inicia el juego y navega al estado de "Juego en Curso".
+onPausePressed()	        _pauseGame	               Pausa el juego.
+onResumePressed()	        _resumeGame	               Reanuda el juego.
+onGameOver()	            _gameOver	                 Termina el juego cuando ocurre una colisión.
+onFoodEaten()	            _eatFood	                 Incrementa la longitud de la serpiente y la puntuación.
+onRestartGamePressed()	  _restartGame	             Reinicia el juego.
+onGoToStartPressed()	    Navigator.pop	             Vuelve al estado de "Inicio".
+onMoveUp()	              _changeDirection('up')     Cambia la dirección de la serpiente hacia arriba.
+onMoveDown()	            _changeDirection('down')   Cambia la dirección de la serpiente hacia abajo.
+onMoveLeft()	            _changeDirection('left')   Cambia la dirección de la serpiente hacia la izquierda.
+onMoveRight()	            _changeDirection('right')  Cambia la dirección de la serpiente hacia la derecha.
