@@ -101,23 +101,29 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+  void _changeDirection(String newDirection) {
+    setState(() {
+      _direction = newDirection;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Score: $_score')),
       body: GestureDetector(
         onVerticalDragUpdate: (details) {
-          if (details.primaryDelta! < 0) {
-            _direction = 'up';
-          } else if (details.primaryDelta! > 0) {
-            _direction = 'down';
+          if (details.primaryDelta! < 0 && _direction != 'down') {
+            _changeDirection('up');
+          } else if (details.primaryDelta! > 0 && _direction != 'up') {
+            _changeDirection('down');
           }
         },
         onHorizontalDragUpdate: (details) {
-          if (details.primaryDelta! < 0) {
-            _direction = 'left';
-          } else if (details.primaryDelta! > 0) {
-            _direction = 'right';
+          if (details.primaryDelta! < 0 && _direction != 'right') {
+            _changeDirection('left');
+          } else if (details.primaryDelta! > 0 && _direction != 'left') {
+            _changeDirection('right');
           }
         },
         child: Stack(
